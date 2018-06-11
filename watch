@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Handle kill signal
+trap cleanup 1 2 3 6
+cleanup()
+{
+	exit 0
+}
+
+SCRIPT=$(readlink -f "$0")
+cwd=$(dirname "$SCRIPT")
+
+# Do not watch if no args
+if [ -z "$1" ]; then
+	haxe
+	exit 0
+fi
+
+while true; do
+	haxe $@
+	haxe -cp "$cwd" -D watcher-path=$cwd --macro "Watcher.waitForChange()" $@
+done
+
