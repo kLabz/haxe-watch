@@ -8,13 +8,14 @@ import sys.FileSystem;
 class Watcher {
 	static function waitForChange():Void {
 		var watchedFolders = [];
-		var cp = Context.getClassPath();
-		var watcherPath = Compiler.getDefine("watcher-path");
+		// var watchedResources = [];
 
+		var watcherPath = Compiler.getDefine("watcher-path");
 		#if !watch_std
 		var std = FileSystem.absolutePath(Sys.getEnv("HAXE_STD_PATH"));
 		#end
 
+		var cp = Context.getClassPath();
 		for (c in cp) {
 			if (c == '') continue;
 			c = FileSystem.absolutePath(c);
@@ -31,6 +32,19 @@ class Watcher {
 			if (watched.length > 0) watchedFolders = watchedFolders.concat(watched);
 		}
 
+		// TODO: find a way to watch resources
+		// Seems impossible atm...
+
+		// TODO: watch hxml files?
+
+		Sys.println(
+			#if !watch_no_color '\x1b[90m' #end
+			+ 'Watching ${watchedFolders.length} directories'
+			// + ' and ${watchedResources.length} resources '
+			+ ' for changes...'
+			#if !watch_no_color + '\x1b[0m' #end
+		);
+
 		var changed = false;
 		var buildDate = Date.now().getTime() + 100;
 		while (!changed) {
@@ -40,7 +54,11 @@ class Watcher {
 				var t = FileSystem.stat(f).mtime.getTime();
 				if (t > buildDate) {
 					#if watch_debug
-					Sys.println('\x1b[90m Changes detected in $f\x1b[0m');
+					Sys.println(
+						#if !watched_no_color '\x1b[90m' #end
+						+ 'Changes detected in $f'
+						#if !watched_no_color + '\x1b[0m' #end
+					);
 					#end
 
 					changed = true;
