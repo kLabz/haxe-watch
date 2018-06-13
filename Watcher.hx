@@ -55,9 +55,9 @@ class Watcher {
 				if (t > buildDate) {
 					#if watch_debug
 					Sys.println(
-						#if !watched_no_color '\x1b[90m' #end
+						#if !watch_no_color '\x1b[90m' #end
 						+ 'Changes detected in $f'
-						#if !watched_no_color + '\x1b[0m' #end
+						#if !watch_no_color + '\x1b[0m' #end
 					);
 					#end
 
@@ -67,7 +67,11 @@ class Watcher {
 			}
 		}
 
-		Sys.println("\x1b[32mChanges detected, rebuilding...\x1b[0m");
+		Sys.println(
+			#if !watch_no_color '\x1b[33m' #end
+			+ 'Changes detected, rebuilding...'
+			#if !watch_no_color + '\x1b[0m' #end
+		);
 		Sys.exit(0);
 	}
 
