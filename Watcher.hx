@@ -10,7 +10,7 @@ class Watcher {
 		var watchedFolders = [];
 		// var watchedResources = [];
 
-		var watcherPath = Compiler.getDefine("watcher-path");
+		var watcherPath = Context.definedValue("watcher-path");
 		#if !watch_std
 		var std = FileSystem.absolutePath(Sys.getEnv("HAXE_STD_PATH"));
 		#end
