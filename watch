@@ -17,7 +17,7 @@ if [ -z "$1" ]; then
 fi
 
 while true; do
-	haxe $@
+	/usr/bin/time -f "Compiled in %e seconds" haxe $@
 	haxe -cp "$cwd" -D watcher-path=$cwd --macro "Watcher.waitForChange()" $@
 done
 
